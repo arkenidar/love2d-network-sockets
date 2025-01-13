@@ -2,7 +2,7 @@
 local socket = require("socket")
 
 function love.load()
-    client = socket.connect("localhost", 12345)
+    client = socket.connect("localhost", 3000)
     if client then
         client:settimeout(0)
         connected = true
@@ -59,6 +59,7 @@ end
 
 function love.quit()
     if connected then
+        client:send("a @client quits\n")
         client:close()
     end
 end

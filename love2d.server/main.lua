@@ -3,7 +3,7 @@ local socket = require("socket")
 
 function love.load()
     -- Create server
-    server = socket.bind('*', 12345)
+    server = socket.bind('*', 3000)
     server:settimeout(0)
     clients = {}
     messages = {}
@@ -16,6 +16,7 @@ function love.update(dt)
         client:settimeout(0)
         table.insert(clients, client)
         print("New client connected!")
+        client:send("welcome from @server\n")
     end
 
     -- Receive messages from clients
@@ -36,11 +37,12 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.print("Server running on port 12345", 10, 10)
+    love.graphics.print("Server running on port 3000", 10, 10)
     love.graphics.print("Connected clients: " .. #clients, 10, 30)
     
     -- Display last 10 messages
-    for i = math.max(1, #messages - 10), #messages do
-        love.graphics.print(messages[i], 10, 50 + (i - math.max(1, #messages - 10)) * 20)
+    local last = math.max(1, #messages - 10)
+    for i = last, #messages do
+        love.graphics.print(messages[i], 10, 50 + (i - last) * 20)
     end
 end
